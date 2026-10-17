@@ -177,6 +177,8 @@ Concerto 会把设置、歌单、下载内容和登录信息保存在游戏或�
 ### 下发预设歌单
 把导出的歌单 JSON（见 `/concerto export-as-playlist`）放到服务端 `Concerto/preset_radios/` 下；其中 `music_agent.json` 是 KTV 模式空闲时的兜底歌单。客户端会自动收到电台列表，也可以用 `/concerto-server fetch-radios` 手动拉取。
 
+手写也可以但字段要求很严：顶层六个字段（`title`、`author`、`createTime`、`description`、`isAlbum`、`list`）一个都不能少，缺任何一个整个文件会被跳过并在日志里报错；单曲格式为 `{"name": "internet", "path": "<直链>", "meta": {"name": "basic", "title": "歌名", "author": "歌手", "src": "来源", "pic": "", "dr": 215000}}`。另外请只用网络来源：曲目是客户端去拉取播放的，只存在于服务端磁盘上的 `local_file` 路径对玩家没有意义；不写 `meta` 块的话歌名会显示成 "unknown"。
+
 ### 缓存与下载
 Concerto 只会在你主动操作时保存音乐：`/concerto save` 保存当前曲目，`download-current` / `download-all` 会连同歌词下载为长期保存的副本。缓存大小可在设置中调整。
 
@@ -227,15 +229,17 @@ Concerto 只会在你主动操作时保存音乐：`/concerto save` 保存当前
 
 ### `server_config.json`
 
+插件启用时读取；改完在游戏里执行 `/concerto-server reload` 即可生效（不用重启）。它是纯 JSON、不能写注释：少写某个键就用默认值，键名写错会被忽略，而且每次读取后文件都会被重新格式化写回。
+
 | 配置项 | 默认值 | 说明 |
 | --- | --- | --- |
-| `auditionRequired` | `true` | `@a` 全服广播需要 OP 通过 `/concerto-server audit` 审核 |
-| `serverMusicAgent` | `true` | 开启全服点播（KTV 模式） |
-| `agentInviteWhenJoin` | `true` | 玩家进服时发送点播邀请 |
-| `musicRoomCommandPermission` | `2` | 创建音乐室所需的最低权限等级 |
-| `musicAgentAddTimeLimit` | `60` | 单个玩家两次点歌的最小间隔（秒） |
-| `musicAgentUseShared` | `true` | 点播曲目统一通过服务端自己的 Cookie 解析 |
-| `kuGouMusicLite` | `false` | 服务端使用酷狗概念版接口（会同步给客户端） |
+| `auditionRequired` | `true` | 发给全服（`@a`）的分享会先进待审列表：审核者收到带「接受/拒绝」按钮的消息，`/concerto-server list` 查看队列，`audit` / `reject <uuid>`（或 `reject all`）处理；只发给单个玩家的分享不审核 |
+| `serverMusicAgent` | `true` | 全服点播（KTV 模式）总开关。关闭后加入队列、点歌、发起投票都会提示"不可用"，也不会再发进服邀请 |
+| `agentInviteWhenJoin` | `true` | 玩家进服时是否弹邀请入队；`serverMusicAgent` 关闭时此项无效 |
+| `musicRoomCommandPermission` | `2` | **模组端**作为服务端时创建音乐室所需的 OP 等级；Paper 插件忽略这个数值，改用 `concerto.room.create` 权限判断 |
+| `musicAgentAddTimeLimit` | `60` | 同一玩家两次点歌的最小间隔（秒），点得太快会被拒绝并提示还需等待多久 |
+| `musicAgentUseShared` | `true` | 服务端用自己配置的 `.cookie` 解析点播曲目，玩家没登录过的平台也能点；设为 `false` 时只有点歌客户端已经解析出可播地址的曲目能正常播放 |
+| `kuGouMusicLite` | `false` | 服务端自身的酷狗请求走"概念版/精简"接口（AppID 与签名不同）；只影响服务端，不会推送给客户端 |
 
 ---
 

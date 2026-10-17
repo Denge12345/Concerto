@@ -178,6 +178,8 @@ All subcommands require permission level 2 (OP) except `fetch-radios`, which eve
 ### Ship preset playlists
 Put exported playlist JSON files (see `/concerto export-as-playlist`) on the server under `Concerto/preset_radios/`; the special file `music_agent.json` is what KTV mode falls back to. Clients receive the radios automatically, or on demand via `/concerto-server fetch-radios`.
 
+Hand-writing one is possible but strict: all six top-level fields (`title`, `author`, `createTime`, `description`, `isAlbum`, `list`) are required — a file missing any of them is skipped and logged as an error — and each entry is `{"name": "internet", "path": "<url>", "meta": {"name": "basic", "title": "...", "author": "...", "src": "...", "pic": "", "dr": 215000}}`. Stick to network sources: the client fetches and plays the track, so `local_file` paths that only exist on the server are useless, and a missing `meta` block makes the title show as "unknown".
+
 ### Cache & downloads
 Concerto only saves music when you ask it to: use `/concerto save` for the current track, or `download-current` / `download-all` for permanent copies with lyrics. The cache size can be adjusted in the settings.
 
@@ -228,15 +230,17 @@ Each HUD element has a `display*` switch, a position, an alignment (`LEFT` / `CE
 
 ### `server_config.json`
 
-| Key | Default | Meaning |
+Read when the plugin enables; after editing the file run `/concerto-server reload` in game (no restart needed). It is plain JSON and cannot hold comments — a key you leave out keeps its default, a misspelled key is ignored, and the file is rewritten in canonical form on every read.
+
+| Key | Default | What it does |
 | --- | --- | --- |
-| `auditionRequired` | `true` | `@a` broadcasts need OP approval via `/concerto-server audit` |
-| `serverMusicAgent` | `true` | Enable the server-wide queue (KTV mode) |
-| `agentInviteWhenJoin` | `true` | Invite players to the queue when they join |
-| `musicRoomCommandPermission` | `2` | Minimum permission level to create a music room |
-| `musicAgentAddTimeLimit` | `60` | Seconds a player must wait between queue submissions |
-| `musicAgentUseShared` | `true` | Resolve queued tracks through the server's own cookies |
-| `kuGouMusicLite` | `false` | Use the KuGou lite endpoints server-side (also pushed to clients) |
+| `auditionRequired` | `true` | Tracks shared to the whole server (`@a`) are held for OP approval: auditors get a message with accept/reject buttons, `/concerto-server list` shows the queue, and `audit` / `reject <uuid>` (`reject all`) resolves it. Sharing to a single player is never queued. |
+| `serverMusicAgent` | `true` | Master switch for the server-wide queue (KTV mode). While it is off, joining the queue, queueing a track or starting a vote answers "not available", and nobody gets invited on join. |
+| `agentInviteWhenJoin` | `true` | Prompt players to join the queue when they connect. No effect while `serverMusicAgent` is off. |
+| `musicRoomCommandPermission` | `2` | OP level required to create a music room **when a mod runs the server**. The Paper plugin ignores this number and checks the `concerto.room.create` permission instead. |
+| `musicAgentAddTimeLimit` | `60` | Seconds one player must wait between two queue submissions; anything faster is refused with a hint showing the remaining time. |
+| `musicAgentUseShared` | `true` | Resolve queued tracks on the server through the server's own `.cookie` files, so players can queue songs from a service they are not signed in to. With `false`, only tracks whose playable link the queueing client already resolved work. |
+| `kuGouMusicLite` | `false` | Use the KuGou "concept/lite" endpoints (different app id and signature) for the server's own KuGou requests. Purely server-side — clients keep their own setting. |
 
 ---
 
