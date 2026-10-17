@@ -1,17 +1,21 @@
 <div align="center">
   <img src="icon-large.png" alt="Concerto" width="256">
   <h1>Concerto</h1>
-  <p><b>An in-game music player for Minecraft — Fabric / NeoForge client, Paper server plugin</b></p>
+  <p><b>An in-game music player for Minecraft — Paper server plugin</b></p>
   <p>
     <a href="https://modrinth.com/mod/A0VZd1kW"><img src="https://img.shields.io/modrinth/dt/A0VZd1kW?logo=modrinth&label=Modrinth" alt="Modrinth Downloads"></a>
     <a href="https://github.com/GregTaoo/Concerto/releases"><img src="https://img.shields.io/github/v/release/GregTaoo/Concerto?logo=github&label=Release" alt="GitHub Release"></a>
-    <img src="https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.20.6%20%7C%201.21.1%20%7C%201.21.6%20%7C%201.21.11%20%7C%2026.1.2%20%7C%2026.2-62b47a?logo=minecraft" alt="Minecraft 1.20.1, 1.20.6, 1.21.1, 1.21.6, 1.21.11, 26.1.2, and 26.2">
-    <img src="https://img.shields.io/badge/Java-21+-f89820?logo=openjdk&logoColor=white" alt="Java 21+">
-    <img src="https://img.shields.io/badge/Loaders-Fabric%20%7C%20NeoForge%20%7C%20Paper-8a2be2" alt="Fabric | NeoForge | Paper">
+    <img src="https://img.shields.io/badge/Minecraft-26.3-62b47a?logo=minecraft" alt="Minecraft 26.3">
+    <img src="https://img.shields.io/badge/Java-25+-f89820?logo=openjdk&logoColor=white" alt="Java 25+">
+    <img src="https://img.shields.io/badge/Loaders-Paper-8a2be2" alt="Paper">
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License"></a>
   </p>
   <p>English | <a href="README_zh.md">简体中文</a></p>
 </div>
+
+> This fork builds **the Paper server plugin for Minecraft 26.3 only** — `./gradlew buildAll` produces
+> `Concerto-mc26.3-paper-<mod version>.jar` from `minecraft_version` in `gradle.properties`. The Fabric and
+> NeoForge client mods are not built here; get them from [upstream](https://github.com/GregTaoo/Concerto).
 
 > Play local files, direct URLs, and music services – NetEase Cloud Music, QQ Music, and KuGou Music – without leaving the game. Listen together in shared music rooms, or let the whole server take turns choosing songs.
 
@@ -24,7 +28,7 @@
 - **Music rooms (listen together)** — members of a room share playback in real time: the same track, the same position, the same pauses. Rooms can be named, listed publicly, and joined from a browser screen or by UUID.
 - **Server-wide queue (KTV mode)** — players queue songs for the whole server, vote to skip, and the server falls back to preset radios when the queue is empty.
 - **Shared access & preset playlists** – server owners can configure their own supported music-service accounts for the server and share curated playlists with everyone.
-- **Cross-platform** — Fabric and NeoForge on the client; a dedicated Paper plugin lets modded clients use every server feature on plugin servers.
+- **Paper server side** — this plugin lets modded clients (Concerto for Fabric / NeoForge, from upstream) use every server feature on plugin servers.
 
 ---
 
@@ -32,13 +36,12 @@
 
 | Platform | What to install |
 | --- | --- |
-| **Fabric client** | `Concerto-mc<version>-fabric-<mod version>.jar` + [Fabric API](https://modrinth.com/mod/fabric-api) |
-| **NeoForge client** | `Concerto-mc<version>-neoforge-<mod version>.jar` |
-| **Paper server** | `Concerto-mc<version>-paper-<mod version>.jar` into `plugins/` |
+| **Paper server** | `Concerto-mc26.3-paper-<mod version>.jar` into `plugins/` (Minecraft 26.3, Java 25) |
+| **Fabric / NeoForge client** | Not built by this fork — grab the client mod from [upstream](https://github.com/GregTaoo/Concerto) |
 
 Concerto stores its settings, playlists, downloads, and sign-in data in the `Concerto/` folder next to the game or server directory.
 
-You can use Concerto as a local player in singleplayer and on servers that do not have it installed. Shared rooms, sharing, and the server-wide queue need Concerto on the server too (Fabric, NeoForge, or Paper).
+Shared rooms, sharing, and the server-wide queue need Concerto on the server, which is what this plugin provides; modded clients on a Paper server get every server feature through it.
 
 ---
 

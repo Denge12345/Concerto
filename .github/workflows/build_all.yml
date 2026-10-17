@@ -141,11 +141,14 @@ jobs:
            1.21.11) GV_ARRAY='["1.21.11"]' ;;
            26.1.2) GV_ARRAY='["26.1.x"]' ;;
            26.2) GV_ARRAY='["26.2.x"]' ;;
+           26.3) GV_ARRAY='["26.3"]' ;;
            *) GV_ARRAY='[]' ;;
           esac
 
           # CurseForge Upload API accepts numeric version IDs. Textual version
-          # types are not stable across the 26.x Minecraft releases.
+          # types are not stable across the 26.x Minecraft releases. Only the
+          # mod loaders need one; the paper jar is uploaded to the Bukkit
+          # endpoint without a game version.
           case "$MC_VER" in
            1.20.1) CF_MINECRAFT_VERSION=9990 ;;
            1.20.6) CF_MINECRAFT_VERSION=11198 ;;
@@ -154,12 +157,16 @@ jobs:
            1.21.11) CF_MINECRAFT_VERSION=14406 ;;
            26.1.2) CF_MINECRAFT_VERSION=16082 ;;
            26.2) CF_MINECRAFT_VERSION=16498 ;;
-           *) echo "Unsupported CurseForge Minecraft version: $MC_VER" >&2; exit 1 ;;
+           *) CF_MINECRAFT_VERSION="" ;;
           esac
           
           # 判断 Loader 类型并写入专属的 GITHUB_OUTPUT
           # *_name 仍是版本号（保持既有命名连续性），*_display 是 Modrinth 上的展示标题
           if echo "$FNAME" | grep -iq "fabric"; then
+           if [ -z "$CF_MINECRAFT_VERSION" ]; then
+            echo "Unsupported CurseForge Minecraft version for Fabric: $MC_VER" >&2
+            exit 1
+           fi
            echo "fabric_file=$FILE" >> $GITHUB_OUTPUT
            echo "fabric_mc=$MC_VER" >> $GITHUB_OUTPUT
            echo "fabric_gv=$GV_ARRAY" >> $GITHUB_OUTPUT
@@ -167,6 +174,10 @@ jobs:
            echo "fabric_name=fabric-${SHORTER_VERSION}-mc${MC_VER}" >> $GITHUB_OUTPUT
            echo "fabric_display=Concerto ${SHORTER_VERSION} for Fabric ${MC_VER}" >> $GITHUB_OUTPUT
           elif echo "$FNAME" | grep -iq "neoforge"; then
+           if [ -z "$CF_MINECRAFT_VERSION" ]; then
+            echo "Unsupported CurseForge Minecraft version for NeoForge: $MC_VER" >&2
+            exit 1
+           fi
            echo "neoforge_file=$FILE" >> $GITHUB_OUTPUT
            echo "neoforge_mc=$MC_VER" >> $GITHUB_OUTPUT
            echo "neoforge_gv=$GV_ARRAY" >> $GITHUB_OUTPUT

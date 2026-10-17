@@ -1,15 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id "architectury-plugin" version "3.5-SNAPSHOT"
-    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
 }
-
-architectury {
-    minecraft = rootProject.minecraft_version
-}
-
-def platforms = rootProject.enabled_platforms.split(",").toList()
-platforms.add("common")
 
 subprojects {
 
@@ -17,36 +8,12 @@ subprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-
-    if (platforms.contains(project.name)) {
-        apply plugin: "dev.architectury.loom"
-
-        loom {
-            silentMojangMappingsLicense()
-        }
-
-        repositories {
-            maven { url "https://maven.neoforged.net/releases/" }
-        }
-
-        dependencies {
-            minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-            // The following line declares the mojmap mappings, you may use other mappings as well
-            mappings loom.officialMojangMappings()
-            // The following line declares the yarn mappings you may select this one as well.
-            // mappings "net.fabricmc:yarn:1.20.1+build.10:v2"
-        }
-    }
 }
 
 allprojects {
     apply plugin: "java"
     apply plugin: "maven-publish"
     apply plugin: "com.github.johnrengelman.shadow"
-
-    if (platforms.contains(project.name)) {
-        apply plugin: "architectury-plugin"
-    }
 
     base {
         archivesName = rootProject.archives_base_name
@@ -65,11 +32,12 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 21
     }
 
+    // 26.x paper-api is Java 25 bytecode, so the default toolchain is 25.
+    // Modules choose their own bytecode target: core 16, paper 25.
     java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
         withSourcesJar()
     }
 }
@@ -89,9 +57,7 @@ tasks.register("buildAll", Copy) {
     into(libOut)
 
     def tasksToCollect = [
-            ["fabric",   "remapJar", "Concerto-mc${mcVersion}-fabric-${modVersion}.jar"],
-            ["neoforge", "remapJar", "Concerto-mc${mcVersion}-neoforge-${modVersion}.jar"],
-            ["paper",    "shadowJar", "Concerto-mc${mcVersion}-paper-${modVersion}.jar"]
+            ["paper", "shadowJar", "Concerto-mc${mcVersion}-paper-${modVersion}.jar"]
     ]
 
     tasksToCollect.each { entry ->

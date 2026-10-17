@@ -7,7 +7,11 @@ configurations {
     implementation.extendsFrom(my)
 }
 
-def paperVersion = "${rootProject.minecraft_version}-R0.1-SNAPSHOT"
+// Paper renamed its api artifacts in 26.1: 1.x releases are published as
+// "<mc>-R0.1-SNAPSHOT", 26.x and later as "<mc>.build.<n>-<stability>", where
+// the plain "<mc>.build.+" pattern resolves to the newest stable build.
+def mcVersion = rootProject.minecraft_version
+def paperVersion = mcVersion.startsWith("1.") ? "${mcVersion}-R0.1-SNAPSHOT" : "${mcVersion}.build.+"
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${paperVersion}")
@@ -15,14 +19,24 @@ dependencies {
     my(project(path: ":core", configuration: "shadow")) { transitive = false }
 }
 
+// paper-api for 26.x is compiled for Java 25; pin the toolchain here so lowering
+// the project-wide one cannot silently break this module.
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+}
+
 processResources {
     inputs.property "version", project.version
-    inputs.property "apiVersion", rootProject.minecraft_version
+    inputs.property "apiVersion", mcVersion
 
     filesMatching("plugin.yml") {
         expand(
                 version: project.version,
-                apiVersion: rootProject.minecraft_version
+                apiVersion: mcVersion
         )
     }
 }

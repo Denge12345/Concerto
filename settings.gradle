@@ -1,18 +1,17 @@
 pluginManagement {
     repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://maven.neoforged.net/releases/" }
-        maven { url 'https://jitpack.io' }
         mavenCentral()
         gradlePluginPortal()
     }
 }
 
+// paper-api for 26.x is built for Java 25, so the build needs a Java 25
+// toolchain even when the machine only ships an older JDK.
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 include("core")
-include("common")
 include("paper")
-include("fabric")
-include("neoforge")
 
 rootProject.name = "concerto"
