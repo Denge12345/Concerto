@@ -148,7 +148,9 @@ jobs:
           # CurseForge Upload API accepts numeric version IDs. Textual version
           # types are not stable across the 26.x Minecraft releases. Only the
           # mod loaders need one; the paper jar is uploaded to the Bukkit
-          # endpoint without a game version.
+          # endpoint without a game version. A release whose Minecraft version
+          # has no id here still ships to GitHub and Modrinth; the CurseForge
+          # upload for the mod loaders is skipped with a warning.
           case "$MC_VER" in
            1.20.1) CF_MINECRAFT_VERSION=9990 ;;
            1.20.6) CF_MINECRAFT_VERSION=11198 ;;
@@ -164,8 +166,7 @@ jobs:
           # *_name 仍是版本号（保持既有命名连续性），*_display 是 Modrinth 上的展示标题
           if echo "$FNAME" | grep -iq "fabric"; then
            if [ -z "$CF_MINECRAFT_VERSION" ]; then
-            echo "Unsupported CurseForge Minecraft version for Fabric: $MC_VER" >&2
-            exit 1
+            echo "::warning::No CurseForge Minecraft version id for $MC_VER; skipping the CurseForge upload of $FNAME"
            fi
            echo "fabric_file=$FILE" >> $GITHUB_OUTPUT
            echo "fabric_mc=$MC_VER" >> $GITHUB_OUTPUT
@@ -175,8 +176,7 @@ jobs:
            echo "fabric_display=Concerto ${SHORTER_VERSION} for Fabric ${MC_VER}" >> $GITHUB_OUTPUT
           elif echo "$FNAME" | grep -iq "neoforge"; then
            if [ -z "$CF_MINECRAFT_VERSION" ]; then
-            echo "Unsupported CurseForge Minecraft version for NeoForge: $MC_VER" >&2
-            exit 1
+            echo "::warning::No CurseForge Minecraft version id for $MC_VER; skipping the CurseForge upload of $FNAME"
            fi
            echo "neoforge_file=$FILE" >> $GITHUB_OUTPUT
            echo "neoforge_mc=$MC_VER" >> $GITHUB_OUTPUT
@@ -278,7 +278,7 @@ jobs:
 
       - name: Check Fabric on CurseForge
         id: curseforge-fabric
-        if: steps.build-run.outputs.fabric_file != ''
+        if: steps.build-run.outputs.fabric_file != '' && steps.build-run.outputs.fabric_cf_mc != ''
         run: bash .ci/.github/scripts/curseforge-idempotency.sh "${{ steps.build-run.outputs.fabric_file }}" 1086212
 
       - name: Publish Fabric to CurseForge
@@ -297,7 +297,7 @@ jobs:
 
       - name: Check NeoForge on CurseForge
         id: curseforge-neoforge
-        if: steps.build-run.outputs.neoforge_file != ''
+        if: steps.build-run.outputs.neoforge_file != '' && steps.build-run.outputs.neoforge_cf_mc != ''
         run: bash .ci/.github/scripts/curseforge-idempotency.sh "${{ steps.build-run.outputs.neoforge_file }}" 1086212
 
       - name: Publish NeoForge to CurseForge

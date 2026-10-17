@@ -1,8 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
-import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
 import org.gradle.api.file.FileTreeElement
-import shadow.org.apache.tools.zip.ZipOutputStream
+import org.apache.tools.zip.ZipOutputStream
 
 configurations {
     my.canBeResolved(true)
@@ -50,7 +50,7 @@ dependencies {
  * Composition instead of inheritance: a build-script subclass of the Groovy
  * ServiceFileTransformer cannot reach its private serviceEntries field.
  */
-class JaadFilteringServiceTransformer implements Transformer {
+class JaadFilteringServiceTransformer implements ResourceTransformer {
     private final ServiceFileTransformer delegate = new ServiceFileTransformer()
 
     @Override
@@ -60,13 +60,11 @@ class JaadFilteringServiceTransformer implements Transformer {
 
     @Override
     void transform(TransformerContext context) {
-        def lines = context.is.readLines().findAll { line ->
+        def lines = context.inputStream.readLines().findAll { line ->
             !line.trim().startsWith('net.sourceforge.jaad.')
         }
         def filtered = new ByteArrayInputStream(lines.join('\n').getBytes('UTF-8'))
-        delegate.transform(TransformerContext.builder()
-                .path(context.path).is(filtered)
-                .relocators(context.relocators).stats(context.stats).build())
+        delegate.transform(new TransformerContext(context.path, filtered, context.relocators))
     }
 
     @Override

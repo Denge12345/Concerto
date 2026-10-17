@@ -1,21 +1,21 @@
 <div align="center">
   <img src="icon-large.png" alt="Concerto" width="256">
   <h1>Concerto</h1>
-  <p><b>Minecraft 游戏内音乐播放器 — Paper 服务端插件</b></p>
+  <p><b>Minecraft 游戏内音乐播放器 — Fabric 客户端，Paper 服务端插件</b></p>
   <p>
     <a href="https://modrinth.com/mod/A0VZd1kW"><img src="https://img.shields.io/modrinth/dt/A0VZd1kW?logo=modrinth&label=Modrinth" alt="Modrinth 下载量"></a>
     <a href="https://github.com/GregTaoo/Concerto/releases"><img src="https://img.shields.io/github/v/release/GregTaoo/Concerto?logo=github&label=Release" alt="GitHub Release"></a>
     <img src="https://img.shields.io/badge/Minecraft-26.3-62b47a?logo=minecraft" alt="Minecraft 26.3">
     <img src="https://img.shields.io/badge/Java-25+-f89820?logo=openjdk&logoColor=white" alt="Java 25+">
-    <img src="https://img.shields.io/badge/加载器-Paper-8a2be2" alt="Paper">
+    <img src="https://img.shields.io/badge/加载器-Fabric%20%7C%20Paper-8a2be2" alt="Fabric | Paper">
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License"></a>
   </p>
   <p><a href="README.md">English</a> | 简体中文</p>
 </div>
 
-> 本分支**只构建适配 Minecraft 26.3 的 Paper 服务端插件**：`./gradlew buildAll` 会按
-> `gradle.properties` 里的 `minecraft_version` 生成 `Concerto-mc26.3-paper-<模组版本>.jar`。
-> 这里不构建 Fabric / NeoForge 客户端模组，请到[上游仓库](https://github.com/GregTaoo/Concerto)获取。
+> 本分支面向 **Minecraft 26.3**：`./gradlew buildAll` 会按 `gradle.properties` 里的 `minecraft_version`
+> 生成 `Concerto-mc26.3-fabric-<模组版本>.jar` 和 `Concerto-mc26.3-paper-<模组版本>.jar`。
+> 这里不构建 NeoForge 版本，需要的话请到[上游仓库](https://github.com/GregTaoo/Concerto)获取。
 
 > 不用切出游戏就能听歌：本地文件、网络直链，以及网易云音乐、QQ 音乐、酷狗音乐。还可以和朋友在同一间音乐室同步听歌，或开启全服点播，让大家轮流点歌。
 
@@ -36,12 +36,13 @@
 
 | 平台 | 需要安装 |
 | --- | --- |
+| **Fabric 客户端** | `Concerto-mc26.3-fabric-<模组版本>.jar` + [Fabric API](https://modrinth.com/mod/fabric-api)（Minecraft 26.3，需要 Java 25） |
 | **Paper 服务端** | `Concerto-mc26.3-paper-<模组版本>.jar` 放进 `plugins/`（Minecraft 26.3，需要 Java 25） |
-| **Fabric / NeoForge 客户端** | 本分支不构建，请到[上游仓库](https://github.com/GregTaoo/Concerto)下载客户端模组 |
+| **NeoForge 客户端** | 本分支不构建，请到[上游仓库](https://github.com/GregTaoo/Concerto)下载 |
 
 Concerto 会把设置、歌单、下载内容和登录信息保存在游戏或服务端目录旁的 `Concerto/` 文件夹中。
 
-音乐室、音乐分享和全服点播等联机功能需要服务端装有 Concerto，本插件提供的正是这部分；装了模组的客户端连上插件服即可使用全部服务端功能。
+单人游戏和未安装 Concerto 的服务器中，都可以把它当作本地播放器使用；音乐室、音乐分享和全服点播等联机功能则需要服务端也安装 Concerto（Fabric 模组或 Paper 插件），且客户端与服务端的 Minecraft 版本必须一致。
 
 ---
 

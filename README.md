@@ -1,21 +1,21 @@
 <div align="center">
   <img src="icon-large.png" alt="Concerto" width="256">
   <h1>Concerto</h1>
-  <p><b>An in-game music player for Minecraft — Paper server plugin</b></p>
+  <p><b>An in-game music player for Minecraft — Fabric client, Paper server plugin</b></p>
   <p>
     <a href="https://modrinth.com/mod/A0VZd1kW"><img src="https://img.shields.io/modrinth/dt/A0VZd1kW?logo=modrinth&label=Modrinth" alt="Modrinth Downloads"></a>
     <a href="https://github.com/GregTaoo/Concerto/releases"><img src="https://img.shields.io/github/v/release/GregTaoo/Concerto?logo=github&label=Release" alt="GitHub Release"></a>
     <img src="https://img.shields.io/badge/Minecraft-26.3-62b47a?logo=minecraft" alt="Minecraft 26.3">
     <img src="https://img.shields.io/badge/Java-25+-f89820?logo=openjdk&logoColor=white" alt="Java 25+">
-    <img src="https://img.shields.io/badge/Loaders-Paper-8a2be2" alt="Paper">
+    <img src="https://img.shields.io/badge/Loaders-Fabric%20%7C%20Paper-8a2be2" alt="Fabric | Paper">
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License"></a>
   </p>
   <p>English | <a href="README_zh.md">简体中文</a></p>
 </div>
 
-> This fork builds **the Paper server plugin for Minecraft 26.3 only** — `./gradlew buildAll` produces
-> `Concerto-mc26.3-paper-<mod version>.jar` from `minecraft_version` in `gradle.properties`. The Fabric and
-> NeoForge client mods are not built here; get them from [upstream](https://github.com/GregTaoo/Concerto).
+> This fork targets **Minecraft 26.3**: `./gradlew buildAll` produces `Concerto-mc26.3-fabric-<mod version>.jar`
+> and `Concerto-mc26.3-paper-<mod version>.jar` from `minecraft_version` in `gradle.properties`. NeoForge is not
+> built here; get that client mod from [upstream](https://github.com/GregTaoo/Concerto).
 
 > Play local files, direct URLs, and music services – NetEase Cloud Music, QQ Music, and KuGou Music – without leaving the game. Listen together in shared music rooms, or let the whole server take turns choosing songs.
 
@@ -28,7 +28,7 @@
 - **Music rooms (listen together)** — members of a room share playback in real time: the same track, the same position, the same pauses. Rooms can be named, listed publicly, and joined from a browser screen or by UUID.
 - **Server-wide queue (KTV mode)** — players queue songs for the whole server, vote to skip, and the server falls back to preset radios when the queue is empty.
 - **Shared access & preset playlists** – server owners can configure their own supported music-service accounts for the server and share curated playlists with everyone.
-- **Paper server side** — this plugin lets modded clients (Concerto for Fabric / NeoForge, from upstream) use every server feature on plugin servers.
+- **Cross-platform** — the Fabric client and the Paper plugin speak the same `concerto:main` channel, so modded clients get every server feature on a plugin server.
 
 ---
 
@@ -36,12 +36,13 @@
 
 | Platform | What to install |
 | --- | --- |
+| **Fabric client** | `Concerto-mc26.3-fabric-<mod version>.jar` + [Fabric API](https://modrinth.com/mod/fabric-api) (Minecraft 26.3, Java 25) |
 | **Paper server** | `Concerto-mc26.3-paper-<mod version>.jar` into `plugins/` (Minecraft 26.3, Java 25) |
-| **Fabric / NeoForge client** | Not built by this fork — grab the client mod from [upstream](https://github.com/GregTaoo/Concerto) |
+| **NeoForge client** | Not built by this fork — grab it from [upstream](https://github.com/GregTaoo/Concerto) |
 
 Concerto stores its settings, playlists, downloads, and sign-in data in the `Concerto/` folder next to the game or server directory.
 
-Shared rooms, sharing, and the server-wide queue need Concerto on the server, which is what this plugin provides; modded clients on a Paper server get every server feature through it.
+You can use Concerto as a local player in singleplayer and on servers that do not have it installed. Shared rooms, sharing, and the server-wide queue need Concerto on the server too (the Fabric mod or the Paper plugin); the client and the server must run the same Minecraft version.
 
 ---
 

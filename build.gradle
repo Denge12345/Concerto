@@ -1,6 +1,10 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.gradleup.shadow" version "9.4.1"
+    id "net.fabricmc.fabric-loom" version "1.16-SNAPSHOT" apply false
 }
+
+def platforms = rootProject.enabled_platforms.split(",").toList()
+platforms.add("common")
 
 subprojects {
 
@@ -8,12 +12,20 @@ subprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+
+    if (platforms.contains(project.name)) {
+        apply plugin: "net.fabricmc.fabric-loom"
+
+        dependencies {
+            minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        }
+    }
 }
 
 allprojects {
     apply plugin: "java"
     apply plugin: "maven-publish"
-    apply plugin: "com.github.johnrengelman.shadow"
+    apply plugin: "com.gradleup.shadow"
 
     base {
         archivesName = rootProject.archives_base_name
@@ -32,10 +44,9 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
+        options.release = 25
     }
 
-    // 26.x paper-api is Java 25 bytecode, so the default toolchain is 25.
-    // Modules choose their own bytecode target: core 16, paper 25.
     java {
         toolchain.languageVersion.set(JavaLanguageVersion.of(25))
         withSourcesJar()
@@ -56,8 +67,12 @@ tasks.register("buildAll", Copy) {
     def libOut = file("$rootDir/build/libs")
     into(libOut)
 
+    // Minecraft 26.x ships unobfuscated, so the fabric shadow jar is already in
+    // production names and nothing has to be remapped; core's relocated libraries
+    // make it the complete client artifact.
     def tasksToCollect = [
-            ["paper", "shadowJar", "Concerto-mc${mcVersion}-paper-${modVersion}.jar"]
+            ["fabric",   "shadowJar", "Concerto-mc${mcVersion}-fabric-${modVersion}.jar"],
+            ["paper",    "shadowJar", "Concerto-mc${mcVersion}-paper-${modVersion}.jar"]
     ]
 
     tasksToCollect.each { entry ->

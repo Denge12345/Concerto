@@ -1,0 +1,60 @@
+package top.gregtao.concerto.util;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
+import top.gregtao.concerto.bridge.MinecraftClientBridge;
+import top.gregtao.concerto.core.Concerto;
+import top.gregtao.concerto.core.player.MusicPlayer;
+import top.gregtao.concerto.core.player.MusicPlayerHandler;
+import top.gregtao.concerto.screen.ConcertoIndexScreen;
+import top.gregtao.concerto.screen.MusicPlayerScreen;
+
+public class ConcertoHotkeys {
+
+    public static KeyMapping.Category CATEGORY =
+            KeyMapping.Category.register(Identifier.fromNamespaceAndPath(Concerto.MOD_ID, "hotkey"));
+
+    public static KeyMapping MAIN_PLAYLIST, INDEX_SCREEN, NEXT_MUSIC, PAUSE_RESUME;
+
+    public static void register(MinecraftClientBridge bridge) {
+        MAIN_PLAYLIST = bridge.registerKeyMapping(new KeyMapping(
+                "concerto.hotkey.main_music_list",
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_U,
+                CATEGORY
+        ));
+        INDEX_SCREEN = bridge.registerKeyMapping(new KeyMapping(
+                "concerto.hotkey.index",
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_I,
+                CATEGORY
+        ));
+        NEXT_MUSIC = bridge.registerKeyMapping(new KeyMapping(
+                "concerto.screen.next",
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_N,
+                CATEGORY
+        ));
+        PAUSE_RESUME = bridge.registerKeyMapping(new KeyMapping(
+                "concerto.screen.pause_resume",
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_P,
+                CATEGORY
+        ));
+        bridge.registerEndOfTickListener(client -> {
+            if (MAIN_PLAYLIST.consumeClick()) {
+                client.gui.setScreen(new MusicPlayerScreen(null));
+            } else if (INDEX_SCREEN.consumeClick()) {
+                client.gui.setScreen(new ConcertoIndexScreen(null));
+            } else if (NEXT_MUSIC.consumeClick()) {
+                MusicPlayerHandler.INSTANCE.playNextAsync(1);
+            } else if (PAUSE_RESUME.consumeClick()) {
+                if (MusicPlayer.INSTANCE.started) {
+                    boolean paused = MusicPlayerHandler.INSTANCE.isPaused();
+                    MusicPlayerHandler.INSTANCE.tryForcePause(!paused);
+                }
+            }
+        });
+    }
+}

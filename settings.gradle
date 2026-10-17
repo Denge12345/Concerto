@@ -1,17 +1,20 @@
 pluginManagement {
     repositories {
+        maven { url "https://maven.fabricmc.net/" }
         mavenCentral()
         gradlePluginPortal()
     }
 }
 
-// paper-api for 26.x is built for Java 25, so the build needs a Java 25
-// toolchain even when the machine only ships an older JDK.
+// Minecraft 26.x (and the matching paper-api) ship Java 25 bytecode, so the build
+// needs a Java 25 toolchain even when the machine only ships an older JDK.
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
 include("core")
+include("common")
 include("paper")
+include("fabric")
 
 rootProject.name = "concerto"
