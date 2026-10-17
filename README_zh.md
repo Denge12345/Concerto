@@ -197,6 +197,7 @@ Concerto 只会在你主动操作时保存音乐：`/concerto save` 保存当前
 | --- | --- | --- |
 | `playerVolume` | `1.0` | 播放器音量，`0.0` – `1.0` |
 | `playerVolumeFollowsMaster` | `true` | 音量再乘以 Minecraft 主音量 |
+| `playbackHistorySize` | `25` | 保留多少首最近播放的歌供回退，`25` – `100` |
 | `loudnessNormalization` | `true` | 让每首歌曲以一致的响度播放 |
 | `loudnessTargetLufs` | `-14.0` | 歌曲均衡到的目标响度，单位 LUFS（`-23.0` – `-11.0`） |
 | `loudnessMaxGainDb` | `15.0` | 对安静歌曲的最大增益，单位 dB（`0.0` – `20.0`），带有限幅器防止削波 |
@@ -218,14 +219,14 @@ Concerto 只会在你主动操作时保存音乐：`/concerto save` 保存当前
 
 | 元素 | 相关配置项 |
 | --- | --- |
-| 歌词 | `displayLyrics`、`lyricsPosition`（默认 `0.5,1-100`）、`lyricsAlignment`、`lyricsColor` |
-| 副歌词（翻译） | `displaySubLyrics`、`subLyricsPosition`（默认 `0.5,1-89`）、`subLyricsAlignment`、`subLyricsColor` |
+| 歌词 | `displayLyrics`、`lyricsPosition`（默认 `0.5,1-70`）、`lyricsAlignment`、`lyricsColor` |
+| 副歌词（翻译） | `displaySubLyrics`、`subLyricsPosition`（默认 `0.5,1-60`）、`subLyricsAlignment`、`subLyricsColor` |
 | 曲目信息 | `displayMusicDetails`、`musicDetailsPosition`（默认 `1-30,0+5`）、`musicDetailsAlignment`、`musicDetailsColor` |
 | 时间与进度条 | `displayTimeProgress`、`timeProgressPosition`（默认 `1-30,0+15`）、`timeProgressAlignment`、`timeProgressTextColor`、`timeProgressColor`、`timeProgressBgColor` |
 | 封面 | `displayCoverImg`、`coverImgPosition`（默认 `1-25,0`）、`coverImgSize`、`coverImgInCircle`、`coverImgRotate` |
 | 其他 | `textShadow`、`hideWhenChat`、`scrollingTextSpeed` |
 
-- **位置格式**：`<横向比例>±<像素>,<纵向比例>±<像素>`。如 `0.5,1-100` 表示水平居中、距底边 100 像素；`1-30,0+15` 表示距右边 30 像素、距顶边 15 像素。
+- **位置格式**：`<横向比例>±<像素>,<纵向比例>±<像素>`。如 `0.5,1-70` 表示水平居中、距底边 70 像素；`1-30,0+15` 表示距右边 30 像素、距顶边 15 像素。
 - **颜色格式**：`#AARRGGBB`，如 `#ffffffff` 为不透明纯白，`#ff00aaaa` 为不透明青色。
 
 ### `server_config.json`

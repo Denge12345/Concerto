@@ -198,6 +198,7 @@ You do not need to edit files for normal use: the in-game options screen covers 
 | --- | --- | --- |
 | `playerVolume` | `1.0` | Player volume, `0.0` – `1.0` |
 | `playerVolumeFollowsMaster` | `true` | Multiply by Minecraft's master volume |
+| `playbackHistorySize` | `25` | Recently played tracks kept for going back, `25` – `100` |
 | `loudnessNormalization` | `true` | Play each track at a consistent loudness |
 | `loudnessTargetLufs` | `-14.0` | Integrated loudness tracks are normalized to, in LUFS (`-23.0` – `-11.0`) |
 | `loudnessMaxGainDb` | `15.0` | Maximum gain applied to quiet tracks, in dB (`0.0` – `20.0`); a limiter prevents clipping |
@@ -219,14 +220,14 @@ Each HUD element has a `display*` switch, a position, an alignment (`LEFT` / `CE
 
 | Element | Keys |
 | --- | --- |
-| Lyrics | `displayLyrics`, `lyricsPosition` (default `0.5,1-100`), `lyricsAlignment`, `lyricsColor` |
-| Sub-lyrics (translation) | `displaySubLyrics`, `subLyricsPosition` (default `0.5,1-89`), `subLyricsAlignment`, `subLyricsColor` |
+| Lyrics | `displayLyrics`, `lyricsPosition` (default `0.5,1-70`), `lyricsAlignment`, `lyricsColor` |
+| Sub-lyrics (translation) | `displaySubLyrics`, `subLyricsPosition` (default `0.5,1-60`), `subLyricsAlignment`, `subLyricsColor` |
 | Track details | `displayMusicDetails`, `musicDetailsPosition` (default `1-30,0+5`), `musicDetailsAlignment`, `musicDetailsColor` |
 | Time & progress bar | `displayTimeProgress`, `timeProgressPosition` (default `1-30,0+15`), `timeProgressAlignment`, `timeProgressTextColor`, `timeProgressColor`, `timeProgressBgColor` |
 | Cover art | `displayCoverImg`, `coverImgPosition` (default `1-25,0`), `coverImgSize`, `coverImgInCircle`, `coverImgRotate` |
 | Misc | `textShadow`, `hideWhenChat`, `scrollingTextSpeed` |
 
-- **Position format**: `<x fraction>±<pixels>,<y fraction>±<pixels>`. `0.5,1-100` = horizontally centered, 100 px above the bottom edge; `1-30,0+15` = 30 px from the right, 15 px from the top.
+- **Position format**: `<x fraction>±<pixels>,<y fraction>±<pixels>`. `0.5,1-70` = horizontally centered, 70 px above the bottom edge; `1-30,0+15` = 30 px from the right, 15 px from the top.
 - **Color format**: `#AARRGGBB`, e.g. `#ffffffff` opaque white, `#ff00aaaa` opaque teal.
 
 ### `server_config.json`
