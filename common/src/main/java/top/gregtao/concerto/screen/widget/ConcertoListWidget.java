@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen.widget;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
@@ -98,7 +99,7 @@ public class ConcertoListWidget<T> extends ObjectSelectionList<ConcertoListWidge
         @Override
         public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubled) {
             if (ConcertoListWidget.this.handleEntryClick(this, event.x(), event.y(), event.button())) return true;
-            if (event.button() == 0) {
+            if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
                 if (Util.getMillis() - this.lastClickTime < 250) {
                     ConcertoListWidget.this.onDoubleClicked(this);
                 } else {

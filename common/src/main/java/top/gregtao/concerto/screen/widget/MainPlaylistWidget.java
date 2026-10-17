@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen.widget;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -60,7 +61,7 @@ public class MainPlaylistWidget extends MetadataListWidget<MainPlaylistWidget.En
 
     @Override
     protected boolean handleEntryClick(ConcertoListWidget<Entry>.Entry entry, double mouseX, double mouseY, int button) {
-        if (button != 0 || mouseX < this.actionStartX || mouseY < this.actionY || mouseY >= this.actionY + ACTION_BUTTON_WIDTH) return false;
+        if (button != InputConstants.MOUSE_BUTTON_LEFT || mouseX < this.actionStartX || mouseY < this.actionY || mouseY >= this.actionY + ACTION_BUTTON_WIDTH) return false;
         int actionIndex = (int) (mouseX - this.actionStartX) / ACTION_BUTTON_WIDTH;
         if (actionIndex < 0 || actionIndex >= this.actionCount) return false;
         if (actionIndex == 0) {
@@ -81,7 +82,7 @@ public class MainPlaylistWidget extends MetadataListWidget<MainPlaylistWidget.En
 
     @Override
     public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubled) {
-        if (event.button() == 0 && PlayerPermissions.canReorderMusicList()
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && PlayerPermissions.canReorderMusicList()
                 && event.x() < this.getRowRight() - 3 - this.actionCount() * ACTION_BUTTON_WIDTH
                 && this.getEntryAtPosition(event.x(), event.y()) instanceof ConcertoListWidget<MainPlaylistWidget.Entry>.Entry entry) {
             boolean handled = super.mouseClicked(event, doubled);
@@ -94,7 +95,7 @@ public class MainPlaylistWidget extends MetadataListWidget<MainPlaylistWidget.En
 
     @Override
     public boolean mouseDragged(@NotNull MouseButtonEvent event, double dragX, double dragY) {
-        if (event.button() == 0 && this.draggedEntry != null) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && this.draggedEntry != null) {
             this.dragging = true;
             this.dropBeforeUuid = this.getDropBeforeUuid(event.x(), event.y());
             return true;
@@ -104,7 +105,7 @@ public class MainPlaylistWidget extends MetadataListWidget<MainPlaylistWidget.En
 
     @Override
     public boolean mouseReleased(@NotNull MouseButtonEvent event) {
-        if (event.button() == 0 && this.draggedEntry != null) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && this.draggedEntry != null) {
             ConcertoListWidget<MainPlaylistWidget.Entry>.Entry source = this.draggedEntry;
             this.draggedEntry = null;
             if (this.dragging && PlayerPermissions.canReorderMusicList()) {

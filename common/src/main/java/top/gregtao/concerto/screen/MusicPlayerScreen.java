@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -271,7 +272,7 @@ public class MusicPlayerScreen extends ConcertoScreen {
     @Override
     public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubled) {
         this.volumeControl.collapseIfClickedOutside(event.x(), event.y());
-        if (event.button() == 0 && this.isOverProgressBar(event.x(), event.y()) && this.seekProgress(event.x(), false)) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && this.isOverProgressBar(event.x(), event.y()) && this.seekProgress(event.x(), false)) {
             this.seekingProgress = true;
             return true;
         }
@@ -280,7 +281,7 @@ public class MusicPlayerScreen extends ConcertoScreen {
 
     @Override
     public boolean mouseDragged(@NotNull MouseButtonEvent event, double dragX, double dragY) {
-        if (this.seekingProgress && event.button() == 0) {
+        if (this.seekingProgress && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             return this.seekProgress(event.x(), false);
         }
         return super.mouseDragged(event, dragX, dragY);
@@ -288,7 +289,7 @@ public class MusicPlayerScreen extends ConcertoScreen {
 
     @Override
     public boolean mouseReleased(@NotNull MouseButtonEvent event) {
-        if (this.seekingProgress && event.button() == 0) {
+        if (this.seekingProgress && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             this.seekingProgress = false;
             return this.seekProgress(event.x(), true);
         }

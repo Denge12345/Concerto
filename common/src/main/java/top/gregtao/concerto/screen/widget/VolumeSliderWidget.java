@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen.widget;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -42,7 +43,7 @@ public class VolumeSliderWidget extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubled) {
-        if (!this.active || !this.visible || event.button() != 0 || !this.isMouseOver(event.x(), event.y())) {
+        if (!this.active || !this.visible || event.button() != InputConstants.MOUSE_BUTTON_LEFT || !this.isMouseOver(event.x(), event.y())) {
             return false;
         }
         this.dragging = true;
@@ -52,7 +53,7 @@ public class VolumeSliderWidget extends AbstractWidget {
 
     @Override
     public boolean mouseDragged(@NotNull MouseButtonEvent event, double dragX, double dragY) {
-        if (!this.dragging || event.button() != 0) {
+        if (!this.dragging || event.button() != InputConstants.MOUSE_BUTTON_LEFT) {
             return false;
         }
         this.updateVolume(event.y());
@@ -61,7 +62,7 @@ public class VolumeSliderWidget extends AbstractWidget {
 
     @Override
     public boolean mouseReleased(@NotNull MouseButtonEvent event) {
-        if (this.dragging && event.button() == 0) {
+        if (this.dragging && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             this.dragging = false;
             ClientConfig.INSTANCE.writeOptions();
             return true;

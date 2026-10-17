@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -281,7 +282,7 @@ public class MusicRoomsScreen extends ConcertoScreen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubled) {
-        if (event.button() == 0 && this.builtState == MusicRoom.ClientState.MUSIC_ROOM && MusicRoom.CLIENT_ROOM != null) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && this.builtState == MusicRoom.ClientState.MUSIC_ROOM && MusicRoom.CLIENT_ROOM != null) {
             String uuid = MusicRoom.CLIENT_ROOM.uuid.toString();
             if (this.isHoveringUuid(event.x(), event.y(), uuid)) {
                 Concerto.getCoreBridge().setClientClipboard(uuid);

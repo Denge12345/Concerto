@@ -1,5 +1,6 @@
 package top.gregtao.concerto.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -236,7 +237,7 @@ public class MusicInfoScreen extends ConcertoScreen {
 
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
-        if (event.button() == 0) this.lyricScrollbar.onRelease(event);
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) this.lyricScrollbar.onRelease(event);
         return super.mouseReleased(event);
     }
 

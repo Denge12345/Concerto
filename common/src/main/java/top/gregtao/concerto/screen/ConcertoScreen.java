@@ -59,11 +59,13 @@ public class ConcertoScreen extends Screen {
             this.message.setMessage(text);
             this.initTabNavigation();
             this.message.visible = true;
+            this.message.active = true;
             int generation = ++this.alertGeneration;
             CompletableFuture.delayedExecutor(5, TimeUnit.SECONDS).execute(() -> Minecraft.getInstance().execute(() -> {
                 if (generation != this.alertGeneration) return;
                 this.message.setMessage(Component.empty());
                 this.message.visible = false;
+                this.message.active = false;
             }));
         });
     }
@@ -86,6 +88,7 @@ public class ConcertoScreen extends Screen {
         this.message = this.addWidget(
                 FocusableTextWidget.builder(Component.empty(), this.font).textWidth(12).build());
         this.message.visible = false;
+        this.message.active = false;
         this.initTabNavigation();
     }
 
